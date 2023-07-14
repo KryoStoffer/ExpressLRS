@@ -29,7 +29,26 @@ uint32_t SerialSBUS::sendRCFrame(bool frameAvailable, bool frameMissed, uint32_t
     // TODO: if failsafeMode == FAILSAFE_SET_POSITION then we use the set positions rather than the last values
     crsf_channels_s PackedRCdataOut;
 
-    if (config.GetSerialProtocol() == PROTOCOL_DJI_RS_PRO)
+    if ((effectivelyFailsafed && config.GetFailsafeMode() == FAILSAFE_SET_POSITION) || (!sendPackets && connectionState != connected))
+    {
+        PackedRCdataOut.ch0 = UINT10_to_CRSF(config.GetPwmChannel(0)->val.failsafe);
+        PackedRCdataOut.ch1 = UINT10_to_CRSF(config.GetPwmChannel(1)->val.failsafe);
+        PackedRCdataOut.ch2 = UINT10_to_CRSF(config.GetPwmChannel(2)->val.failsafe);
+        PackedRCdataOut.ch3 = UINT10_to_CRSF(config.GetPwmChannel(3)->val.failsafe);
+        PackedRCdataOut.ch4 = UINT10_to_CRSF(config.GetPwmChannel(4)->val.failsafe);
+        PackedRCdataOut.ch5 = UINT10_to_CRSF(config.GetPwmChannel(5)->val.failsafe);
+        PackedRCdataOut.ch6 = UINT10_to_CRSF(config.GetPwmChannel(6)->val.failsafe);
+        PackedRCdataOut.ch7 = UINT10_to_CRSF(config.GetPwmChannel(7)->val.failsafe);
+        PackedRCdataOut.ch8 = UINT10_to_CRSF(config.GetPwmChannel(8)->val.failsafe);
+        PackedRCdataOut.ch9 = UINT10_to_CRSF(config.GetPwmChannel(9)->val.failsafe);
+        PackedRCdataOut.ch10 = UINT10_to_CRSF(config.GetPwmChannel(10)->val.failsafe);
+        PackedRCdataOut.ch11 = UINT10_to_CRSF(config.GetPwmChannel(11)->val.failsafe);
+        PackedRCdataOut.ch12 = UINT10_to_CRSF(config.GetPwmChannel(12)->val.failsafe);
+        PackedRCdataOut.ch13 = UINT10_to_CRSF(config.GetPwmChannel(13)->val.failsafe);
+        PackedRCdataOut.ch14 = UINT10_to_CRSF(config.GetPwmChannel(14)->val.failsafe);
+        PackedRCdataOut.ch15 = UINT10_to_CRSF(config.GetPwmChannel(15)->val.failsafe);
+    }
+    else if (config.GetSerialProtocol() == PROTOCOL_DJI_RS_PRO)
     {
         PackedRCdataOut.ch0 = fmap(channelData[0], CRSF_CHANNEL_VALUE_MIN, CRSF_CHANNEL_VALUE_MAX, 352, 1696);
         PackedRCdataOut.ch1 = fmap(channelData[1], CRSF_CHANNEL_VALUE_MIN, CRSF_CHANNEL_VALUE_MAX, 352, 1696);
@@ -50,22 +69,22 @@ uint32_t SerialSBUS::sendRCFrame(bool frameAvailable, bool frameMissed, uint32_t
     }
     else
     {
-        PackedRCdataOut.ch0 = channelData[0];
-        PackedRCdataOut.ch1 = channelData[1];
-        PackedRCdataOut.ch2 = channelData[2];
-        PackedRCdataOut.ch3 = channelData[3];
-        PackedRCdataOut.ch4 = channelData[4];
-        PackedRCdataOut.ch5 = channelData[5];
-        PackedRCdataOut.ch6 = channelData[6];
-        PackedRCdataOut.ch7 = channelData[7];
-        PackedRCdataOut.ch8 = channelData[8];
-        PackedRCdataOut.ch9 = channelData[9];
-        PackedRCdataOut.ch10 = channelData[10];
-        PackedRCdataOut.ch11 = channelData[11];
-        PackedRCdataOut.ch12 = channelData[12];
-        PackedRCdataOut.ch13 = channelData[13];
-        PackedRCdataOut.ch14 = channelData[14];
-        PackedRCdataOut.ch15 = channelData[15];
+        PackedRCdataOut.ch0 = channelData[config.GetPwmChannel(0)->val.inputChannel];
+        PackedRCdataOut.ch1 = channelData[config.GetPwmChannel(1)->val.inputChannel];
+        PackedRCdataOut.ch2 = channelData[config.GetPwmChannel(2)->val.inputChannel];
+        PackedRCdataOut.ch3 = channelData[config.GetPwmChannel(3)->val.inputChannel];
+        PackedRCdataOut.ch4 = channelData[config.GetPwmChannel(4)->val.inputChannel];
+        PackedRCdataOut.ch5 = channelData[config.GetPwmChannel(5)->val.inputChannel];
+        PackedRCdataOut.ch6 = channelData[config.GetPwmChannel(6)->val.inputChannel];
+        PackedRCdataOut.ch7 = channelData[config.GetPwmChannel(7)->val.inputChannel];
+        PackedRCdataOut.ch8 = channelData[config.GetPwmChannel(8)->val.inputChannel];
+        PackedRCdataOut.ch9 = channelData[config.GetPwmChannel(9)->val.inputChannel];
+        PackedRCdataOut.ch10 = channelData[config.GetPwmChannel(10)->val.inputChannel];
+        PackedRCdataOut.ch11 = channelData[config.GetPwmChannel(11)->val.inputChannel];
+        PackedRCdataOut.ch12 = channelData[config.GetPwmChannel(12)->val.inputChannel];
+        PackedRCdataOut.ch13 = channelData[config.GetPwmChannel(13)->val.inputChannel];
+        PackedRCdataOut.ch14 = channelData[config.GetPwmChannel(14)->val.inputChannel];
+        PackedRCdataOut.ch15 = channelData[config.GetPwmChannel(15)->val.inputChannel];
     }
 
     uint8_t extraData = 0;

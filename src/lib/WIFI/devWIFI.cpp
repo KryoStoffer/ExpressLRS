@@ -364,8 +364,7 @@ static void GetConfiguration(AsyncWebServerRequest *request)
     json["config"]["modelid"] = config.GetModelId();
     json["config"]["force-tlm"] = config.GetForceTlmOff();
     json["config"]["vbind"] = config.GetVolatileBind();
-    #if defined(GPIO_PIN_PWM_OUTPUTS)
-    for (int ch=0; ch<GPIO_PIN_PWM_OUTPUTS_COUNT; ++ch)
+    for (uint8_t ch=0; ch<CRSF_NUM_CHANNELS; ++ch)
     {
       json["config"]["pwm"][ch]["config"] = config.GetPwmChannel(ch)->raw;
       json["config"]["pwm"][ch]["pin"] = GPIO_PIN_PWM_OUTPUTS[ch];
@@ -381,7 +380,6 @@ static void GetConfiguration(AsyncWebServerRequest *request)
       #endif
       json["config"]["pwm"][ch]["features"] = features;
     }
-    #endif
     #endif
     json["config"]["product_name"] = product_name;
     json["config"]["lua_name"] = device_name;

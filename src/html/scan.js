@@ -142,8 +142,6 @@ function updatePwmSettings(arPwm) {
 
   const setDisabled = (index, onoff) => {
     _(`pwm_${index}_ch`).disabled = onoff;
-    _(`pwm_${index}_inv`).disabled = onoff;
-    _(`pwm_${index}_nar`).disabled = onoff;
     _(`pwm_${index}_fs`).disabled = onoff;
     _(`pwm_${index}_fsmode`).disabled = onoff;
   }

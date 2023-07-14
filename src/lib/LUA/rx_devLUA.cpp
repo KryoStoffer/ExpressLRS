@@ -23,7 +23,7 @@ static struct luaItem_selection luaSerialProtocol = {
 static struct luaItem_selection luaFailsafeMode = {
     {"Failsafe Mode", CRSF_TEXT_SELECTION},
     0, // value
-    "No Pulses;Last Pos",
+    "No Pulses;Last Pos;Set Pos",
     STR_EMPTYSPACE
 };
 
@@ -94,7 +94,6 @@ static struct luaItem_string luaELRSversion = {
 
 //---------------------------- Output Mapping -----------------------------
 
-#if defined(GPIO_PIN_PWM_OUTPUTS)
 static struct luaItem_folder luaMappingFolder = {
     {"Output Mapping", CRSF_FOLDER},
 };
@@ -142,8 +141,6 @@ static struct luaItem_command luaSetFailsafe = {
     lcsIdle, // step
     STR_EMPTYSPACE
 };
-
-#endif // GPIO_PIN_PWM_OUTPUTS
 
 //---------------------------- Output Mapping -----------------------------
 
@@ -372,7 +369,7 @@ static void luaparamSetFalisafe(struct luaPropertiesCommon *item, uint8_t arg)
     newStep = lcsExecuting;
     msg = "Setting failsafe";
 
-    for (int ch=0; ch<GPIO_PIN_PWM_OUTPUTS_COUNT; ++ch)
+    for (int ch=0; ch<CRSF_NUM_CHANNELS; ++ch)
     {
       rx_config_pwm_t newPwmCh;
       // The value must fit into the 10 bit range of the failsafe
