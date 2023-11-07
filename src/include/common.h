@@ -187,6 +187,8 @@ enum eServoOutputMode : uint8_t
     somSerial,  // Serial TX or RX depending on pin
     somSCL,     // I2C clock signal
     somSDA,     // I2C data line
+    somTX2,     // Serial2 TX telemetry
+    somRX2,     // Serial2 RX telemetry
     somPwm,     // True PWM mode (NOT SUPPORTED)
 };
 

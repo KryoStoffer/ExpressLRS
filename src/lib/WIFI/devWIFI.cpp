@@ -377,6 +377,7 @@ static void GetConfiguration(AsyncWebServerRequest *request)
       else if (GPIO_PIN_SCL == UNDEF_PIN || GPIO_PIN_SDA == UNDEF_PIN) features |= 12; // Both I2C SCL/SDA supported (on any pin)
       #if defined(PLATFORM_ESP32)
       if (pin != 0) features |= 16; // DShot supported
+      features |= 32; // Serial 2 Any port
       #endif
       json["config"]["pwm"][ch]["features"] = features;
     }

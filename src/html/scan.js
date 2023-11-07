@@ -91,13 +91,11 @@ function updatePwmSettings(arPwm) {
       modes.push('Serial TX');
       modes.push(undefined);  // SCL
       modes.push(undefined);  // SDA
-      modes.push(undefined);  // true PWM
       pinRxIndex = index;
     } else if (features & 2) {
       modes.push('Serial RX');
       modes.push(undefined);  // SCL
       modes.push(undefined);  // SDA
-      modes.push(undefined);  // true PWM
       pinTxIndex = index;
     } else {
       modes.push(undefined);  // Serial
@@ -111,7 +109,13 @@ function updatePwmSettings(arPwm) {
       } else {
         modes.push(undefined);
       }
-      modes.push(undefined);  // true PWM
+    }
+    if (features & 32) {
+      modes.push('Serial2 TX');
+      modes.push('Serial2 RX');
+    } else {
+      modes.push(undefined);
+      modes.push(undefined);
     }
     modes.push(undefined);  // true PWM
     const modeSelect = enumSelectGenerate(`pwm_${index}_mode`, mode, modes);
@@ -141,9 +145,9 @@ function updatePwmSettings(arPwm) {
   _('pwm').appendChild(grp);
 
   const setDisabled = (index, onoff) => {
-    _(`pwm_${index}_ch`).disabled = onoff;
-    _(`pwm_${index}_fs`).disabled = onoff;
-    _(`pwm_${index}_fsmode`).disabled = onoff;
+    _(`pwm_${index}_ch`).disabled = false;
+    _(`pwm_${index}_fs`).disabled = false;
+    _(`pwm_${index}_fsmode`).disabled = false;
   }
   arPwm.forEach((item,index)=>{
     const pinMode = _(`pwm_${index}_mode`)
@@ -186,45 +190,6 @@ function updatePwmSettings(arPwm) {
     };
     failsafeMode.onchange();
   });
-  
-  modeSelectionInit = false;
-
-  // put some contraints on pinRx/Tx mode selects
-  if (pinRxIndex !== undefined && pinTxIndex !== undefined) {
-    const pinRxMode = _(`pwm_${pinRxIndex}_mode`);
-    const pinTxMode = _(`pwm_${pinTxIndex}_mode`);
-    pinRxMode.onchange = () => {
-      if (pinRxMode.value == 9) { // Serial
-        pinTxMode.value = 9;
-        setDisabled(pinRxIndex, true);
-        setDisabled(pinTxIndex, true);
-        pinTxMode.disabled = true;
-        _('serial-config').style.display = 'block';
-        _('baud-config').style.display = 'block';
-      }
-      else {
-        pinTxMode.value = 0;
-        setDisabled(pinRxIndex, false);
-        setDisabled(pinTxIndex, false);
-        pinTxMode.disabled = false;
-        _('serial-config').style.display = 'none';
-        _('baud-config').style.display = 'none';
-      }
-    }
-    pinTxMode.onchange = () => {
-      if (pinTxMode.value == 9) { // Serial
-        pinRxMode.value = 9;
-        setDisabled(pinRxIndex, true);
-        setDisabled(pinTxIndex, true);
-        pinTxMode.disabled = true;
-        _('serial-config').style.display = 'block';
-        _('baud-config').style.display = 'block';
-      }
-    }
-    const pinTx = pinTxMode.value;
-    pinRxMode.onchange();
-    if(pinRxMode.value != 9) pinTxMode.value = pinTx;
-  }
 }
 @@end
 
@@ -242,7 +207,7 @@ function init() {
       if (storedModelId === 255) {
         _('modelid').value = '';
       } else {
-        _('modelid').value = storedModelId;
+        _('mdelid').value = storedModelId;
       }
     } else {
       _('modelid').style.display = 'none';

@@ -41,6 +41,7 @@
 #include <FS.h>
 #elif defined(PLATFORM_ESP32)
 #include <SPIFFS.h>
+#include "devHobbyWing.h"
 #endif
 
 ///LUA///
@@ -90,6 +91,9 @@ device_affinity_t ui_devices[] = {
 #endif
 #ifdef HAS_MSP_VTX
   {&MSPVTx_device, 0}, // dependency on VTxSPI_device
+#endif
+#if defined(PLATFORM_ESP32)
+  {&HobbyWing_device,  0},
 #endif
 };
 

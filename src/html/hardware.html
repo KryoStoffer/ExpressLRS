@@ -257,6 +257,8 @@ td img.icon-pwm {
 					<tr><td></td><td>Has LM75A Thermal sensor</td><td><input size='3' id='thermal_lm75a' name='thermal_lm75a' type='checkbox'/></td><td>Checked if there is a LM75A thermal sensor on the I2C bus</td></tr>
 @@end
 @@if not isTX:
+					<tr><td></td><td>RX2 pin<img class="icon-input"/></td><td><input size='3' id='serial2_rx' name='serial2_rx' type='text'/></td><td>Pin used to receive secondary serial eg. Telemetry</td></tr>
+					<tr><td></td><td>TX2 pin<img class="icon-output"/></td><td><input size='3' id='serial2_tx' name='serial2_tx' type='text'/></td><td>Pin used to transmit secondary serial eg. Telemetry</td></tr>
 					<tr><td colspan='2'><b>PWM</td></tr>
 					<tr><td></td><td>PWM output pins<img class="icon-pwm"/></td><td><input size='40' id='pwm_outputs' name='pwm_outputs' type='text' class='array'/></td><td>Comma-separated list of pins used for PWM output</td></tr>
 
